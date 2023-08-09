@@ -1,0 +1,32 @@
+import pandas as pd
+import wikipedia
+
+# Establecer el idioma de Wikipedia
+wikipedia.set_lang("es")  # Configura el idioma a español
+
+# Obtener la lista de distritos de El Salvador
+page = wikipedia.page("Anexo:Municipios_de_Honduras")
+municipios = page.links
+
+# Descargar la información de cada distrito
+data = []
+
+for municipio in municipios:
+    try:
+        page = wikipedia.page(municipio)
+        content = page.content
+
+        # Agregar los datos a la lista
+        data.append({
+            'Nombre': page.title,
+            'Contenido': content
+        })
+    except:
+        # Manejar distritos que no se puedan acceder en Wikipedia
+        pass
+
+# Crear un DataFrame de Pandas usando los datos recolectados
+df = pd.DataFrame(data)
+
+# Guardar el DataFrame en un archivo de Excel
+df.to_excel('municipios_honduras.xlsx', index=False)
